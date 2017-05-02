@@ -41,7 +41,6 @@ dependencies {
     compile localGroovy()
     compile("org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE")
     compile("com.hbo.common:gradle-buildinfo-plugin:1.1")
-    compile("com.palantir:jacoco-coverage:0.4.0")
 }
 
 mavenSettings {
