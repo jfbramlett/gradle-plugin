@@ -99,5 +99,13 @@ class Common5Plugin implements Plugin<Project> {
                 requiredTasks.addAll(project.getTasksByName("jacocoTestCoverageVerification", false))
                 task.finalizedBy(requiredTasks)
         }
+
+        //project.extensions.add("common5Version", "5.3.1")
+        if (project.hasProperty('releaseVersion') && !project.releaseVersion.startsWith('${')) {
+            project.version = project.releaseVersion
+        } else {
+            project.version = '1.0-SNAPSHOT'
+        }
+
     }
 }
