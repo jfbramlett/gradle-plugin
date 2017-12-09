@@ -9,9 +9,12 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.quality.FindBugs
 import org.gradle.api.plugins.quality.FindBugsPlugin
 import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.api.tasks.testing.Test
 import org.gradle.plugins.ide.idea.IdeaPlugin
 import org.gradle.testing.jacoco.plugins.JacocoPlugin
+import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
+import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.gradle.testing.jacoco.tasks.rules.JacocoLimit
 import org.gradle.testing.jacoco.tasks.rules.JacocoViolationRule
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
@@ -19,24 +22,29 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 /**
  * Our gradle plugin used to generate our buildinfo info
  */
-class BasePlugin implements Plugin<Project> {
+class Common5Plugin implements Plugin<Project> {
 
 
     public void apply(final Project project) {
 
-        project.extensions.create("hboCommon", HboCommonPluginExtension)
+        project.extensions.create("common5", HboCommonPluginExtension)
 
         project.plugins.apply(GroovyPlugin)
         project.plugins.apply(JavaPlugin)
         project.plugins.apply(IdeaPlugin)
         project.plugins.apply(SpringBootPlugin)
-        project.plugins.apply(JacocoPlugin)
-        project.plugins.apply(BuildInfoPlugin)
         project.plugins.apply(FindBugsPlugin)
+        project.plugins.apply(JacocoPlugin)
 
+        if (!(project.hasProperty("prBuild") && project.prBuild.equals("true"))) {
+            project.plugins.apply(BuildInfoPlugin)
+        }
 
         project.tasks.withType(JavaCompile) {
-            task -> task.properties.put("options.encoding", "UTF-8")
+            task ->
+                task.properties.put("options.encoding", "UTF-8")
+                task.setSourceCompatibility("1.8")
+                task.setTargetCompatibility("1.8")
         }
 
         // configure findbugs
@@ -47,11 +55,20 @@ class BasePlugin implements Plugin<Project> {
         }
         project.dependencies.add("compile", "com.google.code.findbugs:findbugs:3.0.1")
 
-        // configure jacoco coverage
+        // configure Jacoco
+        String jacocoVersion = "0.7.6.201602180812"
+        if (project.hasProperty("sonarbuild")) {
+            jacocoVersion = "0.7.3.201502191951"
+        }
+        project.tasks.withType(JacocoPluginExtension) {
+            task ->
+                task.toolVersion = jacocoVersion
+        }
+
         project.afterEvaluate {
             project.tasks.withType(JacocoCoverageVerification) {
                 task ->
-                    println("Coverage set to " + project.hboCommon.minCoverage)
+                    println("Coverage set to " + project.common5.minCoverage)
 
                     task.violationRules.rule(new Action<JacocoViolationRule>() {
                         @Override
@@ -59,7 +76,7 @@ class BasePlugin implements Plugin<Project> {
                             jacocoViolationRule.limit(new Action<JacocoLimit>() {
                                 @Override
                                 void execute(JacocoLimit jacocoLimit) {
-                                    jacocoLimit.minimum = new BigDecimal(project.hboCommon.minCoverage)
+                                    jacocoLimit.minimum = new BigDecimal(project.common5.minCoverage)
                                 }
                             })
                         }
@@ -68,12 +85,19 @@ class BasePlugin implements Plugin<Project> {
             }
         }
 
-        // configure our release version
-        if (project.hasProperty('releaseVersion') && !project.releaseVersion.startsWith('${')) {
-            project.version = project.releaseVersion
-        } else {
-            project.version = '1.0-SNAPSHOT'
+        project.tasks.withType(JacocoReport) {
+            task ->
+                task.reports.xml.enabled = true
+                task.reports.html.enabled = true
         }
 
+
+        project.test
+        project.tasks.withType(Test) {
+            task ->
+                Set requiredTasks = new HashSet(project.getTasksByName("jacocoTestReport", false))
+                requiredTasks.addAll(project.getTasksByName("jacocoTestCoverageVerification", false))
+                task.finalizedBy(requiredTasks)
+        }
     }
 }

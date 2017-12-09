@@ -1,5 +1,5 @@
 group 'com.hbo.common'
-version '1.0-SNAPSHOT'
+version '1.0'
 description 'A parent gradle plugin'
 
 buildscript {
@@ -29,9 +29,10 @@ repositories {
 
 
 ext {
-    springBootVersion = '1.4.3.RELEASE'
+    springBootVersion = '1.5.2.RELEASE'
     buildInfoPluginVersion = '1.1'
     jacocoVersion = '0.4.0'
+    findBugsVersion = '3.0.1'
 
     mavenSettingsLocation = '~/.m2/settings.xml'
 }
@@ -39,8 +40,9 @@ ext {
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile("org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE")
-    compile("com.hbo.common:gradle-buildinfo-plugin:1.1")
+    compile("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    compile("com.hbo.common:gradle-buildinfo-plugin:${buildInfoPluginVersion}")
+    compile("com.google.code.findbugs:findbugs:${findBugsVersion}")
 }
 
 mavenSettings {
