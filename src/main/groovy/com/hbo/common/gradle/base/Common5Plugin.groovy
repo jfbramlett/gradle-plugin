@@ -1,6 +1,9 @@
 package com.hbo.common.gradle.base
 
 import com.hbo.common.buildinfo.gradle.BuildInfoPlugin
+import io.spring.gradle.dependencymanagement.DependencyManagementPlugin
+import io.spring.gradle.dependencymanagement.org.apache.maven.model.Dependency
+import io.spring.gradle.dependencymanagement.org.apache.maven.model.DependencyManagement
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -35,6 +38,7 @@ class Common5Plugin implements Plugin<Project> {
         project.plugins.apply(SpringBootPlugin)
         project.plugins.apply(FindBugsPlugin)
         project.plugins.apply(JacocoPlugin)
+        project.plugins.apply(DependencyManagementPlugin)
 
         if (!(project.hasProperty("prBuild") && project.prBuild.equals("true"))) {
             project.plugins.apply(BuildInfoPlugin)
@@ -105,6 +109,12 @@ class Common5Plugin implements Plugin<Project> {
             project.version = project.releaseVersion
         } else {
             project.version = '1.0-SNAPSHOT'
+        }
+
+        // dependency management section
+        project.tasks.withType(DependencyManagement) {
+            task ->
+                task.addDependency(new Dependency())
         }
 
     }
