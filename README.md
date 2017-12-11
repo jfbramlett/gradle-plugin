@@ -19,23 +19,32 @@ Plugins Automatically Applied:
 Custom Configurations:
 
  - Java
+ 
  	source and target compatibility set to 1.8
 
  - FindBugs
+ 
  	output's HTML report
 
  - Jacoco 
+ 
  	uses latest Jacoco unless doing Sonar Build (as identified by -Psonarbuild=true)
  	adds check for minimum coverage can be customized by configuring:
+	
 		common5 {
+		
  		   minCoverage = 0.0
+		   
 		}
+		
  	outputs xml and html reports
 
 In addition, provides a shortcut for defining and managing dependencies. You can specify a dependency like:
 
 dependencies {
+
  compile com5dep("hbo-common-starter-rest")
+ 
 }
 
 which will resolve to com.hbo.common:hbo-common-starter-rest:5.3.1
