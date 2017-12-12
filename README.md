@@ -1,4 +1,4 @@
-# HBO-COMMON-GRADLE_BASE
+# HBO-COMMON-GRADLE-Plugin
 
 A plugin that applies a set of common plugins for a gradle build. The idea
 being you apply this plugin and it will automatically apply a predefined set of
