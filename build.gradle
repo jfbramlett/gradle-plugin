@@ -24,7 +24,7 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenLocal()
-    maven { url "http://maven.homebox.com/content/groups/public/" }
+    maven { url "https://maven.homebox.com/content/groups/public/" }
 }
 
 
@@ -61,7 +61,7 @@ publishing {
     repositories {
         maven {
             name "central"
-            url "http://maven.homebox.com/content/repositories/${project.version.endsWith('-SNAPSHOT') ? 'HBOSNAP' : 'HBO'}"
+            url "https://maven.homebox.com/content/repositories/${project.version.endsWith('-SNAPSHOT') ? 'HBOSNAP' : 'HBO'}"
         }
     }
 }
