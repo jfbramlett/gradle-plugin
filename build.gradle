@@ -1,5 +1,5 @@
 group 'com.hbo.common'
-version '1.0'
+version '5.3.1'
 description 'A parent gradle plugin'
 
 buildscript {
@@ -59,6 +59,9 @@ publishing {
         }
     }
     repositories {
-        mavenLocal()
+        maven {
+            name "central"
+            url "http://maven.homebox.com/content/repositories/${project.version.endsWith('-SNAPSHOT') ? 'HBOSNAP' : 'HBO'}"
+        }
     }
 }

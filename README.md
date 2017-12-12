@@ -4,6 +4,22 @@ A plugin that applies a set of common plugins for a gradle build. The idea
 being you apply this plugin and it will automatically apply a predefined set of
 other plugings (like Jacoco, FindBugs, etc...).
 
+To use simply add the following to your build.gradle:
+
+    buildscript {
+    
+        dependencies {
+        
+            classpath("com.hbo.common:gradle-base:5.3.1")
+            
+        }
+        
+    }
+
+    apply plugin: 'hbo.common5'
+
+
+
 Configuration is done via an extension.
 
 Plugins Automatically Applied:
@@ -41,11 +57,11 @@ Custom Configurations:
 
 In addition, provides a shortcut for defining and managing dependencies. You can specify a dependency like:
 
-dependencies {
-
- compile com5dep("hbo-common-starter-rest")
- 
-}
+    dependencies {
+    
+     compile com5dep("hbo-common-starter-rest")
+     
+    }
 
 which will resolve to com.hbo.common:hbo-common-starter-rest:5.3.1
 
