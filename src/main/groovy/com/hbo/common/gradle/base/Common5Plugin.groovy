@@ -19,6 +19,10 @@ import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.gradle.testing.jacoco.tasks.rules.JacocoLimit
 import org.gradle.testing.jacoco.tasks.rules.JacocoViolationRule
+import org.sonarqube.gradle.SonarQubeExtension
+import org.sonarqube.gradle.SonarQubePlugin
+import org.sonarqube.gradle.SonarQubeProperties
+import org.sonarqube.gradle.SonarQubeTask
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 /**
@@ -31,16 +35,21 @@ class Common5Plugin implements Plugin<Project> {
 
         project.extensions.create("common5", HboCommonPluginExtension)
 
+        // do this first as we configure Sonar via System properties
+        applySonarQubeConfiguration(project)
+
         project.plugins.apply(GroovyPlugin)
         project.plugins.apply(JavaPlugin)
         project.plugins.apply(IdeaPlugin)
         project.plugins.apply(SpringBootPlugin)
         project.plugins.apply(FindBugsPlugin)
         project.plugins.apply(JacocoPlugin)
-
+        project.plugins.apply(SonarQubePlugin)
         if (!(project.hasProperty("prBuild") && project.prBuild.equals("true"))) {
             project.plugins.apply(BuildInfoPlugin)
         }
+
+
 
         applyJavaConfiguration(project)
         applyFindBugsConfiguration(project)
@@ -120,6 +129,11 @@ class Common5Plugin implements Plugin<Project> {
                 requiredTasks.addAll(project.getTasksByName("jacocoTestCoverageVerification", false))
                 task.finalizedBy(requiredTasks)
         }
+    }
+
+    private void applySonarQubeConfiguration(final Project project) {
+        System.setProperty("sonar.jacoco.reportPath", project.buildDir.getAbsolutePath() + "/jacoco/test/exec")
+        System.setProperty("sonar.java.coveragePlugin", "jacoco")
     }
 
     private void resolveDependencies(final Project project) {

@@ -34,6 +34,7 @@ ext {
     jacocoVersion = '0.4.0'
     findBugsVersion = '3.0.1'
     commonsTextVersion = "1.1"
+    sonarVersion = "2.5"
     mavenSettingsLocation = '~/.m2/settings.xml'
 }
 
@@ -44,6 +45,7 @@ dependencies {
     compile("com.hbo.common:gradle-buildinfo-plugin:${buildInfoPluginVersion}")
     compile("com.google.code.findbugs:findbugs:${findBugsVersion}")
     compile("org.apache.commons:commons-text:${commonsTextVersion}")
+    compile("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${sonarVersion}")
 }
 
 mavenSettings {
