@@ -19,10 +19,7 @@ import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.gradle.testing.jacoco.tasks.rules.JacocoLimit
 import org.gradle.testing.jacoco.tasks.rules.JacocoViolationRule
-import org.sonarqube.gradle.SonarQubeExtension
 import org.sonarqube.gradle.SonarQubePlugin
-import org.sonarqube.gradle.SonarQubeProperties
-import org.sonarqube.gradle.SonarQubeTask
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 /**
@@ -48,7 +45,6 @@ class Common5Plugin implements Plugin<Project> {
         if (!(project.hasProperty("prBuild") && project.prBuild.equals("true"))) {
             project.plugins.apply(BuildInfoPlugin)
         }
-
 
 
         applyJavaConfiguration(project)
