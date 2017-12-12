@@ -35,7 +35,7 @@ ext {
     findBugsVersion = '3.0.1'
     commonsTextVersion = "1.1"
     sonarVersion = "2.5"
-    mavenSettingsLocation = '~/.m2/settings.xml'
+    if (!project.hasProperty('mavenSettingsLocation')) { mavenSettingsLocation = '~/.m2/settings.xml'}
 }
 
 dependencies {
