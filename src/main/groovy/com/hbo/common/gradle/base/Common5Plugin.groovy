@@ -84,15 +84,6 @@ class Common5Plugin implements Plugin<Project> {
     }
 
     private void applyJacocoConfiguration(final Project project) {
-        // configure Jacoco
-        //String jacocoVersion = "0.7.6.201602180812"
-        //if (project.hasProperty("sonarbuild")) {
-        String jacocoVersion = "0.7.3.201502191951"
-        //}
-
-        logger.info("Using Jacoco version: " + jacocoVersion)
-        project.getExtensions().getByType(JacocoPluginExtension.class).toolVersion = jacocoVersion
-
         //project.tasks.withType(JacocoPluginExtension) {
         //    task ->
         //        logger.info("Using Jacoco version: " + jacocoVersion)
@@ -100,9 +91,18 @@ class Common5Plugin implements Plugin<Project> {
         //}
 
         project.afterEvaluate {
+            // configure Jacoco
+            //String jacocoVersion = "0.7.6.201602180812"
+            //if (project.hasProperty("sonarbuild")) {
+            String jacocoVersion = "0.7.3.201502191951"
+            //}
+
+            logger.info("Using Jacoco version: " + jacocoVersion)
+            project.getExtensions().getByType(JacocoPluginExtension.class).toolVersion = jacocoVersion
+
             project.tasks.withType(JacocoCoverageVerification) {
                 task ->
-                    println("Coverage set to " + project.common5.minCoverage)
+                    logger.info("Coverage set to " + project.common5.minCoverage)
 
                     task.violationRules.rule(new Action<JacocoViolationRule>() {
                         @Override
