@@ -5,4 +5,5 @@ package com.hbo.common.gradle.base
  */
 class HboCommonPluginExtension {
     double minCoverage = 0.70
+    boolean spockTesting = true
 }

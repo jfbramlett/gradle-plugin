@@ -19,6 +19,8 @@ import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.gradle.testing.jacoco.tasks.rules.JacocoLimit
 import org.gradle.testing.jacoco.tasks.rules.JacocoViolationRule
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.sonarqube.gradle.SonarQubePlugin
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
@@ -26,7 +28,9 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
  * Our gradle plugin used to generate our buildinfo info
  */
 class Common5Plugin implements Plugin<Project> {
+    private static final Logger logger = LoggerFactory.getLogger(Common5Plugin)
 
+    private Common5DependencyResolver dependencyResolver = new Common5DependencyResolver()
 
     public void apply(final Project project) {
 
@@ -42,6 +46,7 @@ class Common5Plugin implements Plugin<Project> {
         project.plugins.apply(FindBugsPlugin)
         project.plugins.apply(JacocoPlugin)
         project.plugins.apply(SonarQubePlugin)
+
         if (!(project.hasProperty("prBuild") && project.prBuild.equals("true"))) {
             project.plugins.apply(BuildInfoPlugin)
         }
@@ -50,10 +55,10 @@ class Common5Plugin implements Plugin<Project> {
         applyJavaConfiguration(project)
         applyFindBugsConfiguration(project)
         applyJacocoConfiguration(project)
+        applySpockConfiguration(project)
 
         resolveDependencies(project)
 
-        //project.extensions.add("common5Version", "5.3.1")
         if (project.hasProperty('releaseVersion') && !project.releaseVersion.startsWith('${')) {
             project.version = project.releaseVersion
         }
@@ -75,7 +80,7 @@ class Common5Plugin implements Plugin<Project> {
                 task.reports.xml.enabled = false
                 task.reports.html.enabled = true
         }
-        project.dependencies.add("compile", "com.google.code.findbugs:findbugs:3.0.1")
+        project.dependencies.add("compile", dependencyResolver.com5dep("findbugs"))
     }
 
     private void applyJacocoConfiguration(final Project project) {
@@ -131,8 +136,20 @@ class Common5Plugin implements Plugin<Project> {
     }
 
     private void resolveDependencies(final Project project) {
-        Common5DependencyResolver resolver = new Common5DependencyResolver(project);
         project.getExtensions().getByType(ExtraPropertiesExtension.class).set("com5dep",
-                new MethodClosure(resolver, "com5dep"));
+                new MethodClosure(dependencyResolver, "com5dep"));
+    }
+
+    private void applySpockConfiguration(final Project project) {
+        if (project.common5.spockTesting) {
+            logger.info("Adding spock configuration")
+            project.dependencies.add("testCompile", dependencyResolver.com5dep("spock-core"))
+            project.dependencies.add("testCompile", dependencyResolver.com5dep("spock-spring"))
+            project.dependencies.add("testCompile", dependencyResolver.com5dep("cglib-nodep"))
+            project.dependencies.add("testCompile", dependencyResolver.com5dep("spring-boot-starter-test"))
+        } else {
+            logger.info("Skipping spock configuration")
+        }
+
     }
 }

@@ -8,12 +8,9 @@ import org.slf4j.LoggerFactory
 class Common5DependencyResolver {
     private final Logger logger = LoggerFactory.getLogger(Common5DependencyResolver)
 
-    final Project project
     final Properties dependencyMap
 
-    public Common5DependencyResolver(final Project project) {
-        this.project = project
-
+    public Common5DependencyResolver() {
         // load our properties
         dependencyMap = new Properties()
         this.getClass().getResource( '/dependencies.properties' ).withInputStream {
