@@ -85,9 +85,9 @@ class Common5Plugin implements Plugin<Project> {
 
     private void applyJacocoConfiguration(final Project project) {
         project.afterEvaluate {
-            String jacocoVersion = "0.7.6.201602180812"
+            String jacocoVersion = dependencyResolver.com5dep("sonar.version")
             if (project.hasProperty("sonarbuild")) {
-                jacocoVersion = "0.7.3.201502191951"
+                jacocoVersion = dependencyResolver.com5dep("sonar-jacoco.version")
             }
             logger.info("Using Jacoco version: " + jacocoVersion)
             project.getExtensions().getByType(JacocoPluginExtension.class).toolVersion = jacocoVersion

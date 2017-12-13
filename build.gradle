@@ -34,7 +34,7 @@ ext {
     jacocoVersion = '0.4.0'
     findBugsVersion = '3.0.1'
     commonsTextVersion = "1.1"
-    sonarVersion = "2.5"
+    sonarVersion = "2.4"
     if (!project.hasProperty('mavenSettingsLocation')) { mavenSettingsLocation = '~/.m2/settings.xml'}
 }
 
