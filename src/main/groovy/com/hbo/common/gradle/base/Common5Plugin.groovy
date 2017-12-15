@@ -128,7 +128,7 @@ class Common5Plugin implements Plugin<Project> {
     }
 
     private void applySonarQubeConfiguration(final Project project) {
-        System.setProperty("sonar.jacoco.reportPath", project.buildDir.getAbsolutePath() + "/jacoco/test.exec")
+        System.setProperty("sonar.jacoco.reportPath", "build/jacoco/test.exec")
         System.setProperty("sonar.java.coveragePlugin", "jacoco")
     }
 
