@@ -30,7 +30,7 @@ repositories {
 
 ext {
     springBootVersion = '1.5.2.RELEASE'
-    buildInfoPluginVersion = '1.1'
+    buildInfoPluginVersion = '1.2'
     jacocoVersion = '0.4.0'
     findBugsVersion = '3.0.1'
     commonsTextVersion = "1.1"
