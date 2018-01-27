@@ -1,5 +1,5 @@
 group 'com.bramlettny'
-version '1.0'
+version '1.1'
 description 'A parent gradle plugin'
 
 buildscript {
@@ -40,6 +40,7 @@ ext {
     jacocoVersion = '0.4.0'
     findBugsVersion = '3.0.1'
     commonsTextVersion = "1.1"
+    lombokVersion = "1.11"
 }
 
 dependencies {
@@ -49,6 +50,7 @@ dependencies {
     compile("com.bramlettny:buildinfo-plugin-gradle:${buildInfoPluginVersion}")
     compile("com.google.code.findbugs:findbugs:${findBugsVersion}")
     compile("org.apache.commons:commons-text:${commonsTextVersion}")
+    compile("io.franzbecker:gradle-lombok:${lombokVersion}")
 }
 
 uploadArchives {
@@ -57,7 +59,7 @@ uploadArchives {
             repository(url: "https://bramlettny.org/nexus/repository/maven-releases") {
                 authentication(userName: artifactoryUser, password: artifactoryPassword)
             }
-            pom.version = "1.0"
+            pom.version = "1.1"
             pom.artifactId = "common-gradle-base"
             pom.groupId = "com.bramlettny"
         }

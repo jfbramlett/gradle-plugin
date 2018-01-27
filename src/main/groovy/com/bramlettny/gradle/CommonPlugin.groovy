@@ -1,6 +1,7 @@
 package com.bramlettny.gradle
 
 import com.bramlettny.buildinfo.gradle.BuildInfoPlugin
+import io.franzbecker.gradle.lombok.LombokPlugin
 import org.codehaus.groovy.runtime.MethodClosure
 import org.gradle.api.Action
 import org.gradle.api.Plugin
@@ -43,6 +44,7 @@ class CommonPlugin implements Plugin<Project> {
         project.plugins.apply(FindBugsPlugin)
         project.plugins.apply(JacocoPlugin)
         project.plugins.apply(BuildInfoPlugin)
+        project.plugins.apply(LombokPlugin)
 
         applyJavaConfiguration(project)
         applyFindBugsConfiguration(project)
